@@ -126,7 +126,9 @@ jobs:
       run: sudo -H -E $pythonLocation/bin/python -m pip install git+https://github.com/jameskermode/f90wrap
 
     - name: Build VMEC
-      run: pip install -vvv -e .
+      run: |
+        cd VMEC2000/python
+        pip install -vvv -e .
 
     #- name: Verify libstell.so was built
     #  run: |
