@@ -1,0 +1,138 @@
+# This file is based on examples in
+# https://docs.github.com/en/actions/language-and-framework-guides/using-python-with-github-actions
+
+# Note that all the "sudo" commands here appear to cause a warning message
+# "sudo: setrlimit(RLIMIT_CORE): operation not permitted"
+# This appears to be a known harmless annoyance:
+# https://gitlab.alpinelinux.org/alpine/aports/-/issues/11122
+
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  CI:
+    runs-on: ubuntu-latest
+
+    env:
+      MACHINE: docker
+      STELLOPT_PATH: /home/runner/work/simsopt/simsopt/STELLOPT
+      #STELLOPT_PATH: ${{ github.workspace }}/STELLOPT
+      OMPI_ALLOW_RUN_AS_ROOT: 1
+      OMPI_ALLOW_RUN_AS_ROOT_CONFIRM: 1
+
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: [3.7, 3.8]
+
+    steps:
+    # First print out lots of information. We do this in separate 
+    # "name" blocks because otherwise the output gets mixed together
+    # in the github actions log.
+    
+    - name: Print user and group id
+      run: |
+        set -ex
+        id
+
+    - name: PWD
+      run: |
+        set -ex
+        pwd
+
+    - name: ls -l
+      run: |
+        set -ex
+        ls -l
+
+    - name: apt-get stuff needed for libstell and vmec
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y build-essential gfortran openmpi-bin libopenmpi-dev libnetcdf-dev libnetcdff-dev liblapack-dev libblacs-mpi-dev libscalapack-mpi-dev libhdf5-openmpi-dev git
+
+    - uses: actions/checkout@v2
+      # If we want submodules downloaded, uncomment the next 2 lines:
+      #with:
+      #  submodules: true
+
+    # We must run actions/checkout@v2 before downloading and building vmec, since checkout deletes the contents of the directory.
+    - name: git clone the standalone VMEC2000 repo
+      run: git clone https://gitlab.com/mbkumar/VMEC2000.git
+
+    - name: ls -l again
+      run: |
+        set -ex
+        ls -l
+        pwd
+
+    - name: Copy setup.py for the CI
+      run: cp setup.py VMEC2000/python
+
+    - name: Verify new setup.py is in place
+      run: |
+        cd VMEC2000/python
+        ls -l
+        cat setup.py
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: which python3 after python setup
+      run: which python3
+
+    - name: which pip after python setup
+      run: pip --version
+
+    - name: which pip using sudo
+      run: sudo pip --version
+
+    - name: which pip using sudo -E
+      run: sudo -E pip --version
+
+    - name: which python using sudo
+      run: sudo which python3
+
+    - name: which python using sudo -E
+      run: sudo -E which python3
+
+    - name: env after adding python
+      run: env
+
+    # From sudo, python must be run via $pythonLocation/bin/python for some reason. "python" is not found
+    # and "python3" gives the wrong version, the version of python3 that came with the container instead
+    # of the version of python3 managed by github actions.
+    # Furthermore, pip must be run via "$pythonLocation/bin/python -m pip" or else the wrong
+    # version of pip is used, (the version of python3 that came with the container).
+    # The -H flag is used because otherwise this warning appears:
+    # WARNING: The directory '/home/runner/.cache/pip' or its parent directory is not owned or is not writable by the current user.
+    # The cache has been disabled. Check the permissions and owner of that directory. If executing pip with sudo, you may want sudo's -H flag.
+    - name: Install python dependencies
+      run: |
+        #sudo -S -H -E LD_LIBRARY_PATH=$LD_LIBRARY_PATH PATH=$PATH pip --version
+        #sudo -S -H -E LD_LIBRARY_PATH=$LD_LIBRARY_PATH PATH=$PATH python3 -m pip --version
+        #sudo -S -H -E LD_LIBRARY_PATH=$LD_LIBRARY_PATH PATH=$PATH $pythonLocation/bin/python -m pip install --upgrade pip
+        #sudo -S -H -E LD_LIBRARY_PATH=$LD_LIBRARY_PATH PATH=$PATH $pythonLocation/bin/python -m pip install numpy scipy wheel
+        sudo -H -E $pythonLocation/bin/python -m pip install --upgrade pip
+        sudo -H -E $pythonLocation/bin/python -m pip install wheel
+
+    - name: Install mpi4py
+      run: |
+        sudo -H -E $pythonLocation/bin/python -m pip install mpi4py
+
+    - name: Install f90wrap
+      run: sudo -H -E $pythonLocation/bin/python -m pip install git+https://github.com/jameskermode/f90wrap
+
+    - name: Build VMEC
+      run: pip install -vvv -e .
+
+    #- name: Verify libstell.so was built
+    #  run: |
+    #    pwd
+    #    ls STELLOPT/LIBSTELL/Release
+
+    #- name: Add STELLOPT/bin to LD_LIBRARY_PATH so libstell.so can be found
+    #  run: echo "::set-env name=LD_LIBRARY_PATH::/home/runner/work/simsopt/simsopt/STELLOPT/bin"
+
