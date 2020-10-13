@@ -11,12 +11,12 @@ setup(
     cmake_args=[
         '-DCMAKE_C_COMPILER=mpicc',
         '-DCMAKE_CXX_COMPILER=mpicxx',
-        '-DCMAKE_Fortran_COMPILER=mpif90'],
+        '-DCMAKE_Fortran_COMPILER=mpif90',
+        '-DNETCDF_INC_PATH=/usr/include',
+        '-DNETCDF_LIB_PATH=/usr/lib/x86_64-linux-gnu'],
     cmake_source_dir=".."
 )
 """
-        '-DNETCDF_INC_PATH=/opt/local/include',
-        '-DNETCDF_LIB_PATH=/opt/local/lib'],
     cmake_args=[
            '-DCMAKE_C_COMPILER=mpicc',
            '-DCMAKE_CXX_COMPILER=mpicxx',
