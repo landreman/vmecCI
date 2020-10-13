@@ -116,7 +116,7 @@ jobs:
         #sudo -S -H -E LD_LIBRARY_PATH=$LD_LIBRARY_PATH PATH=$PATH $pythonLocation/bin/python -m pip install --upgrade pip
         #sudo -S -H -E LD_LIBRARY_PATH=$LD_LIBRARY_PATH PATH=$PATH $pythonLocation/bin/python -m pip install numpy scipy wheel
         sudo -H -E $pythonLocation/bin/python -m pip install --upgrade pip
-        sudo -H -E $pythonLocation/bin/python -m pip install wheel numpy
+        sudo -H -E $pythonLocation/bin/python -m pip install wheel setuptools numpy scikit-build ninja cmake
 
     - name: Install mpi4py
       run: |
