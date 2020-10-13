@@ -134,10 +134,16 @@ jobs:
     - name: env after adding to LD_LIBRARY_PATH
       run: env
 
-    - name: Build VMEC
+    - name: ls in VMEC2000/python 1
+      run: ls -l VMEC2000/python
+
+    - name: Build VMEC with pip install
       run: |
         cd VMEC2000/python
         pip install -vvv -e .
+
+    - name: ls in VMEC2000/python 2
+      run: ls -l VMEC2000/python
 
     - name: Try importing vmec module
       run: python -c "print(dir()); import vmec; print(dir()); print(dir(vmec))"
