@@ -152,7 +152,7 @@ jobs:
       run: ls VMEC2000/python/_skbuild/*/cmake-install/vmec/*
 
     - name: Try importing vmec module
-      run: python -c "print(dir()); import vmec; print(dir()); print(dir(vmec))"
+      run: python -c "print(dir()); import vmec; print(dir()); print(dir(vmec)); print(vmec.__package__); print(vmec.__spec__); print(vmec.__doc__)"
 
     #- name: Verify libstell.so was built
     #  run: |
