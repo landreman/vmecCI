@@ -140,10 +140,16 @@ jobs:
     - name: Build VMEC with pip install
       run: |
         cd VMEC2000/python
-        pip install -vvv -e .
+        pip install -vvv .
 
     - name: ls in VMEC2000/python 2
       run: ls -l VMEC2000/python
+
+    - name: ls in VMEC2000/python/_skbuild
+      run: ls VMEC2000/python/_skbuild/
+
+    - name: ls in VMEC2000/python/_skbuild*/cmake-install/vmec/*
+      run: ls VMEC2000/python/_skbuild/*/cmake-install/vmec/*
 
     - name: Try importing vmec module
       run: python -c "print(dir()); import vmec; print(dir()); print(dir(vmec))"
