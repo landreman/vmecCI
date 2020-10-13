@@ -140,7 +140,7 @@ jobs:
         pip install -vvv -e .
 
     - name: Try importing vmec module
-      run: python -c "import vmec"
+      run: python -c "import vmec; print(dir(vmec))"
 
     #- name: Verify libstell.so was built
     #  run: |
