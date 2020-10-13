@@ -127,7 +127,7 @@ jobs:
 
     - name: ls in /usr/lib/x86_64-linux-gnu
       run: ls -l /usr/lib/x86_64-linux-gnu
-	
+
     - name: Add to LD_LIBRARY_PATH so scalapack etc can be found
       run: echo "::set-env name=LD_LIBRARY_PATH::/usr/lib/x86_64-linux-gnu"
 
