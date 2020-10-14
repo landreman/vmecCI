@@ -154,6 +154,9 @@ jobs:
     - name: Try importing vmec module
       run: python -c "print(dir()); import vmec; print(dir()); print(dir(vmec)); print('package:', vmec.__package__); print('spec:', vmec.__spec__); print('doc:', vmec.__doc__); print('file:', vmec.__file__); print('path:', vmec.__path__)"
 
+    - name: Try importing vmec module from where it actually lives
+      run: python -c "import sys; sys.path.append('/home/runner/work/vmecCI/vmecCI/VMEC2000/python/_skbuild/linux-x86_64-3.7/cmake-install/vmec'); import vmec; print(dir()); print(dir(vmec)); print('package:', vmec.__package__); print('spec:', vmec.__spec__); print('doc:', vmec.__doc__); print('file:', vmec.__file__); print('path:', vmec.__path__)"
+
     #- name: Verify libstell.so was built
     #  run: |
     #    pwd
