@@ -66,14 +66,14 @@ jobs:
         ls -l
         pwd
 
-    - name: Copy setup.py for the CI
-      run: cp setup.py VMEC2000/python
+    - name: Copy cmake_config_file.json for the CI
+      run: cp cmake_config_file.json VMEC2000/python
 
-    - name: Verify new setup.py is in place
+    - name: Verify new cmake_config_file.json is in place
       run: |
         cd VMEC2000/python
         ls -l
-        cat setup.py
+        cat cmake_config_file.json
 
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v2
