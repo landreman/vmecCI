@@ -137,10 +137,20 @@ jobs:
     - name: ls in VMEC2000/python 1
       run: ls -l VMEC2000/python
 
-    - name: Build VMEC with pip install
+    #- name: Build VMEC with pip install
+    #  run: |
+    #    cd VMEC2000/python
+    #    pip install -vvv -e .
+
+    - name: Build VMEC with python setup.py
       run: |
         cd VMEC2000/python
-        pip install -vvv -e .
+        python setup.py build_ext
+
+    - name: Install vmec module
+      run: |
+        cd VMEC2000/python
+        python setup.py install
 
     - name: ls in VMEC2000/python 2
       run: ls -l VMEC2000/python
