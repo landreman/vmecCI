@@ -155,11 +155,11 @@ jobs:
     - name: ls in VMEC2000/python 2
       run: ls -l VMEC2000/python
 
-    - name: ls in VMEC2000/python/_skbuild
-      run: ls VMEC2000/python/_skbuild/
+    #- name: ls in VMEC2000/python/_skbuild
+    #  run: ls VMEC2000/python/_skbuild/
 
-    - name: ls in VMEC2000/python/_skbuild*/cmake-install/vmec/*
-      run: ls VMEC2000/python/_skbuild/*/cmake-install/vmec/*
+    #- name: ls in VMEC2000/python/_skbuild*/cmake-install/vmec/*
+    #  run: ls VMEC2000/python/_skbuild/*/cmake-install/vmec/*
 
     - name: Try importing vmec module
       run: python -c "print(dir()); import vmec; print(dir()); print(dir(vmec)); print('package:', vmec.__package__); print('spec:', vmec.__spec__); print('doc:', vmec.__doc__); print('file:', vmec.__file__); print('path:', vmec.__path__)"
