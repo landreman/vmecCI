@@ -140,7 +140,7 @@ jobs:
     - name: Build VMEC with pip install
       run: |
         cd VMEC2000/python
-        pip install -vvv -e .
+        pip install -vvv .
 
     #- name: Build VMEC with python setup.py
     #  run: |
